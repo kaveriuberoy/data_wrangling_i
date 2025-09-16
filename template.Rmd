@@ -8,6 +8,8 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(janitor)
+library(readxl)
+library(haven)
 ```
 
 Let's import a dataset.
@@ -43,10 +45,10 @@ litters_df =
   read_csv("data/FAS_litters.csv", na = c("NA",".",""))
 ```
 
-Look at your data.
+skim.
 
 ```{r}
-names(litters_df)
+skimr::skim(litters_df)
 ```
 
 ## import pups data
@@ -58,7 +60,43 @@ pups_df =
     skip=3,
     na = c("NA",".","")
     )
+
+pups_df <- 
+  janitor::clean_names(pups_df)
+
+skimr::skim(pups_df)
 ```
 
+## Okay what about excel
+CSVs are great but sometimes you need an excel. 
+
+```{r}
+mlb_df=
+  read_excel("data/mlb11.xlsx")
+```
+
+Import LotR
+
+```{r}
+fotr_df =
+  read_excel("data/LotR_Words.xlsx", range = "B3:D6")
+```
+
+## SAS?
+
+Import the PULSE data
+
+```{r}
+pulse_df = read_sas("data/public_pulse_data.sas7bdat")
+pulse_df <- 
+  janitor::clean_names(pulse_df)
+```
+
+## why is read.csv bad? prints everything
+
+```{r}
+litters_df_base = 
+  read.csv("data/FAS_litters.csv")
+```
 
 
