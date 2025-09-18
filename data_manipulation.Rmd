@@ -86,3 +86,73 @@ filter(litters_df, pups_born_alive>=5)
 filter(litters_df, pups_born_alive!=5)
 ```
 
+Match to a set
+
+```{r}
+filter(litters_df, group %in% c("Con7","Con8"))
+```
+
+filter out missing rows with `drop_na()`
+
+```{r}
+drop_na(litters_df)
+drop_na(litters_df, gd0_weight)
+```
+
+for LA 
+```{r}
+filter(pups_df,sex==1)
+filter(pups_df,pd_walk<11,sex==2)
+```
+
+## `mutate`
+
+`mutate` to create or modify variables. 
+```{r}
+mutate(
+       litters_df,
+       wt_gain= gd18_weight-gd0_weight,
+       group= str_to_lower(group)
+       )
+```
+
+## `arrange``
+
+`arrange` arranges things.
+
+```{r}
+arrange(litters_df,pups_born_alive)
+arrange(litters_df,group, pups_born_alive)
+arrange(litters_df,desc(group), pups_born_alive)
+```
+
+## PIPES
+
+
+```{r}
+litters_df =
+  read_csv("data/FAS_litters.csv",na=c("NA",".","")) |>
+  janitor:: clean_names()|>
+  select(group, litter_number, starts_with("gd"))|>
+  drop_na()|>
+  mutate(
+    wt_gain= gd18_weight-gd0_weight
+  )
+
+```
+
+Learning assessment 
+
+```{r}
+pups_df =
+  read_csv("data/FAS_pups.csv", skip = 3, na = c("NA",".","")) |>
+  janitor:: clean_names()|>
+  filter(sex==1)|>
+  select(-pd_ears)|>
+  mutate(
+    pd_pivot_7= pd_pivot>=7
+  )
+
+```
+
+
